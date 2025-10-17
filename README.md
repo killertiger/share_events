@@ -56,14 +56,48 @@ Create an event
 ```
 POST /events HTTP/1.1
 Host: localhost:3000
+Authorization: Bearer {TOKEN}
 Content-Type: application/json
-Content-Length: 55
+Content-Length: 144
 
 {
-    "title": "Test event",
-    "date": "2025-10-11"
+    "title": "A test event",
+    "description": "Testing...",
+    "address": "Test street 5, Test City 5",
+    "date": "2025-07-05T17:00:00"
 }
 ```
+
+Get events:
+
+```
+GET /events HTTP/1.1
+Host: localhost:3000
+```
+
+Update event:
+```
+PUT /events/1760697764826 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer {TOKEN}
+Content-Type: application/json
+Content-Length: 146
+
+{
+    "title": "A test event 2",
+    "description": "Testing...",
+    "address": "Test street 5, Test City 5",
+    "date": "2025-07-05T17:00:00"
+}
+```
+
+Delete event:
+```
+DELETE /events/1760697764826 HTTP/1.1
+Host: localhost:3000
+Authorization: Bearer {TOKEN}
+```
+
 
 ## Prompts
 
@@ -187,3 +221,21 @@ Inline chat - controllers/events-controllers.js
 Inline chat - routes/events.js
 
 > update the routes to use the appropriate controller functions from #file:events-controllers.js 
+
+#### Add validation to create events
+
+Inline chat - controllers/events-controllers.js - Select create event
+
+> Add validation to ensure title, description, address and date are all not empty (also not just a bunch of blanks) and valid values.
+
+#### Add validation to update events
+
+Inline chat - controllers/events-controllers.js - Select update event
+
+> Add validation here
+
+#### Add validation to update events
+
+Inline chat - util/auth.js at the end
+
+> add authenticate method to validate the token

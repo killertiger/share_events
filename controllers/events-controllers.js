@@ -6,8 +6,24 @@ import * as eventModel from '../models/event.js';
 export async function create(req, res) {
     const { title, description, address, date } = req.body || {};
 
-    if (!title || !date) {
-        return res.status(400).json({ error: 'title and date are required' });
+    // Helper to check for non-empty, non-whitespace strings
+    function isValidString(str) {
+        return typeof str === 'string' && str.trim().length > 0;
+    }
+
+    if (
+        !isValidString(title) ||
+        !isValidString(description) ||
+        !isValidString(address) ||
+        !isValidString(date)
+    ) {
+        return res.status(400).json({ error: 'title, description, address, and date are required and must not be empty' });
+    }
+
+    // Optionally, validate date format (ISO 8601)
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) {
+        return res.status(400).json({ error: 'date must be a valid date string' });
     }
 
     try {
@@ -45,8 +61,38 @@ export function update(req, res) {
     const { id } = req.params;
     const updateData = req.body || {};
 
+    // Only allow updating these fields
+    const allowedFields = ['title', 'description', 'address', 'date'];
+    const updates = {};
+
+    // Helper to check for non-empty, non-whitespace strings
+    function isValidString(str) {
+        return typeof str === 'string' && str.trim().length > 0;
+    }
+
+    for (const key of allowedFields) {
+        if (updateData.hasOwnProperty(key)) {
+            if (key === 'date') {
+                const dateObj = new Date(updateData.date);
+                if (isNaN(dateObj.getTime())) {
+                    return res.status(400).json({ error: 'date must be a valid date string' });
+                }
+                updates.date = updateData.date;
+            } else {
+                if (!isValidString(updateData[key])) {
+                    return res.status(400).json({ error: `${key} must not be empty` });
+                }
+                updates[key] = updateData[key];
+            }
+        }
+    }
+
+    if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ error: 'No valid fields to update' });
+    }
+
     try {
-        const updated = eventModel.updateEvent(id, updateData);
+        const updated = eventModel.updateEvent(id, updates);
         if (!updated) return res.status(404).json({ error: 'Event not found' });
         return res.json(updated);
     } catch (err) {

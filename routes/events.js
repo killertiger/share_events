@@ -1,5 +1,6 @@
 import express from "express";
 import * as eventController from "../controllers/events-controllers.js";
+import { authenticate } from "../util/auth.js";
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.use(express.json());
 // create a new event
 // POST /events
 // body: { title, date, location, description }
-router.post("/", eventController.create);
+router.post("/", authenticate, eventController.create);
 
 // get all events
 // GET /events
@@ -22,10 +23,10 @@ router.get("/:id", eventController.get);
 // edit an existing event (partial update)
 // PUT /events/:id
 // body: any of { title, date, location, description }
-router.put("/:id", eventController.update);
+router.put("/:id", authenticate, eventController.update);
 
 // delete an event
 // DELETE /events/:id
-router.delete("/:id", eventController.deleteItem);
+router.delete("/:id", authenticate, eventController.deleteItem);
 
 export default router;
