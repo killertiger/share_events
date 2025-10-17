@@ -27,7 +27,7 @@ export async function create(req, res) {
     }
 
     try {
-        const event = await eventModel.createEvent({ title, description, address, date });
+        const event = await eventModel.createEvent({ title, description, address, date, userId: req.user.id });
         return res.status(201).json(event);
     } catch (err) {
         return res.status(500).json({ error: err?.message || 'Failed to create event' });
@@ -70,6 +70,15 @@ export function update(req, res) {
         return typeof str === 'string' && str.trim().length > 0;
     }
 
+    // First, fetch the event to check user ownership
+    const event = eventModel.getEventById(id);
+    if (!event) {
+        return res.status(404).json({ error: 'Event not found' });
+    }
+    if (!req.user || event.userId !== req.user.id) {
+        return res.status(403).json({ error: 'You are not authorized to edit this event' });
+    }
+
     for (const key of allowedFields) {
         if (updateData.hasOwnProperty(key)) {
             if (key === 'date') {
@@ -104,6 +113,13 @@ export function update(req, res) {
 export function deleteItem(req, res) {
     const { id } = req.params;
     try {
+        const event = eventModel.getEventById(id);
+        if (!event) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        if (!req.user || event.userId !== req.user.id) {
+            return res.status(403).json({ error: 'You are not authorized to delete this event' });
+        }
         const deleted = eventModel.deleteEvent(id);
         if (!deleted) return res.status(404).json({ error: 'Event not found' });
         return res.json(deleted);

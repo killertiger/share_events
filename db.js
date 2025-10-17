@@ -37,7 +37,9 @@ export function initializeDatabase() {
     address TEXT,
     date TEXT NOT NULL,
     createdAt TEXT NOT NULL,
-    updatedAt TEXT NOT NULL
+    updatedAt TEXT NOT NULL,
+    user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users(id)
   );
 `);
   console.log('Database initialized');

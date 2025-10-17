@@ -12,14 +12,6 @@ router.use(express.json());
 // body: { title, date, location, description }
 router.post("/", authenticate, eventController.create);
 
-// get all events
-// GET /events
-router.get("/", eventController.getAll);
-
-// get one event
-// GET /events/:id
-router.get("/:id", eventController.get);
-
 // edit an existing event (partial update)
 // PUT /events/:id
 // body: any of { title, date, location, description }
@@ -28,5 +20,13 @@ router.put("/:id", authenticate, eventController.update);
 // delete an event
 // DELETE /events/:id
 router.delete("/:id", authenticate, eventController.deleteItem);
+
+// get all events
+// GET /events
+router.get("/", eventController.getAll);
+
+// get one event
+// GET /events/:id
+router.get("/:id", eventController.get);
 
 export default router;

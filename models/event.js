@@ -6,6 +6,7 @@ export async function createEvent(eventData) {
   const now = new Date().toISOString();
   const event = {
     id: Date.now().toString(),
+    userId: eventData.userId,
     title: eventData.title,
     description: eventData.description || '',
     address: eventData.address || '',
@@ -15,8 +16,8 @@ export async function createEvent(eventData) {
   };
 
   const stmt = db.prepare(`
-    INSERT INTO events (id, title, description, address, date, createdAt, updatedAt)
-    VALUES (@id, @title, @description, @address, @date, @createdAt, @updatedAt)
+    INSERT INTO events (id, userId, title, description, address, date, createdAt, updatedAt)
+    VALUES (@id, @userId, @title, @description, @address, @date, @createdAt, @updatedAt)
   `);
   stmt.run(event);
   return event;

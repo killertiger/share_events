@@ -239,3 +239,19 @@ Inline chat - controllers/events-controllers.js - Select update event
 Inline chat - util/auth.js at the end
 
 > add authenticate method to validate the token
+
+#### Add user id in DB
+
+Inline chat - models/event.js method createEvent
+
+> store user id
+
+#### Check if it is the same user to Edit and Delete
+
+Inline chat - models/event.js method update
+
+> check that user id (in req.user) is the same as the user id stored for the event that's about to be edited
+
+Inline chat - models/event.js method delete
+
+> also check user id
