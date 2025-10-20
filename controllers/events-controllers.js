@@ -5,6 +5,7 @@ import * as eventModel from '../models/event.js';
 // Create a new event
 export async function create(req, res) {
     const { title, description, address, date } = req.body || {};
+    const image = req.file;
 
     // Helper to check for non-empty, non-whitespace strings
     function isValidString(str) {
@@ -15,9 +16,10 @@ export async function create(req, res) {
         !isValidString(title) ||
         !isValidString(description) ||
         !isValidString(address) ||
-        !isValidString(date)
+        !isValidString(date) ||
+        !image
     ) {
-        return res.status(400).json({ error: 'title, description, address, and date are required and must not be empty' });
+        return res.status(400).json({ error: 'title, description, address, date, and image are required and must not be empty' });
     }
 
     // Optionally, validate date format (ISO 8601)
@@ -27,7 +29,7 @@ export async function create(req, res) {
     }
 
     try {
-        const event = await eventModel.createEvent({ title, description, address, date, userId: req.user.id });
+        const event = await eventModel.createEvent({ title, description, address, date, userId: req.user.id, image: image.filename });
         return res.status(201).json(event);
     } catch (err) {
         return res.status(500).json({ error: err?.message || 'Failed to create event' });
@@ -60,6 +62,7 @@ export function getAll(req, res) {
 export function update(req, res) {
     const { id } = req.params;
     const updateData = req.body || {};
+    const image = req.file;
 
     // Only allow updating these fields
     const allowedFields = ['title', 'description', 'address', 'date'];
@@ -96,9 +99,16 @@ export function update(req, res) {
         }
     }
 
+    if (!image) {
+        return res.status(400).json({ error: 'image is required' });
+    }
+
     if (Object.keys(updates).length === 0) {
         return res.status(400).json({ error: 'No valid fields to update' });
     }
+
+    updates.image = image.filename;
+    
     console.log('Updates to apply:', updates);
     try {
         const updated = eventModel.updateEvent(id, updates);

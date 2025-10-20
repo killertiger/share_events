@@ -8,6 +8,7 @@ Dependencies:
 - better-sqlite3 - Store data in sqlite
 - bcryptjs - Encrypt data, e.g. password
 - jsonwebtoken - JWT
+- multer - upload multiple files
 
 VsCode Extensions:
 - SQLite Viewer - https://marketplace.cursorapi.com/items/?itemName=qwtel.sqlite-viewer
@@ -68,6 +69,9 @@ Content-Length: 144
 }
 ```
 
+Create an event with image:
+It should use the form-data
+
 Get events:
 
 ```
@@ -101,7 +105,7 @@ Authorization: Bearer {TOKEN}
 
 ## Prompts
 
-### Planning
+### Planning - Chatgpt
 
 On chatgpt:
 
@@ -255,3 +259,9 @@ Inline chat - models/event.js method update
 Inline chat - models/event.js method delete
 
 > also check user id
+
+
+### Chatgpt
+
+
+> generate a dummy event image showing a group of people hiking in the mountains

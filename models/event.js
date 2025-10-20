@@ -11,13 +11,14 @@ export async function createEvent(eventData) {
     description: eventData.description || '',
     address: eventData.address || '',
     date: eventData.date,
+    image: eventData.image || '',
     createdAt: now,
     updatedAt: now
   };
 
   const stmt = db.prepare(`
-    INSERT INTO events (id, userId, title, description, address, date, createdAt, updatedAt)
-    VALUES (@id, @userId, @title, @description, @address, @date, @createdAt, @updatedAt)
+    INSERT INTO events (id, userId, title, description, address, date, image, createdAt, updatedAt)
+    VALUES (@id, @userId, @title, @description, @address, @date, @image, @createdAt, @updatedAt)
   `);
   stmt.run(event);
   return event;
@@ -52,6 +53,7 @@ export function updateEvent(id, updateData) {
         description = @description,
         address = @address,
         date = @date,
+        image = @image,
         createdAt = @createdAt,
         updatedAt = @updatedAt
     WHERE id = @id

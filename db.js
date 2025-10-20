@@ -36,6 +36,7 @@ export function initializeDatabase() {
     description TEXT,
     address TEXT,
     date TEXT NOT NULL,
+    image TEXT,
     createdAt TEXT NOT NULL,
     updatedAt TEXT NOT NULL,
     userId INTEGER,
