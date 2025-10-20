@@ -75,10 +75,10 @@ export function update(req, res) {
     if (!event) {
         return res.status(404).json({ error: 'Event not found' });
     }
-    if (!req.user || event.userId !== req.user.id) {
+    if (!req.user || Number(event.userId) !== Number(req.user.id)) {
         return res.status(403).json({ error: 'You are not authorized to edit this event' });
     }
-
+    console.log('Update data received:', updateData);
     for (const key of allowedFields) {
         if (updateData.hasOwnProperty(key)) {
             if (key === 'date') {
@@ -99,7 +99,7 @@ export function update(req, res) {
     if (Object.keys(updates).length === 0) {
         return res.status(400).json({ error: 'No valid fields to update' });
     }
-
+    console.log('Updates to apply:', updates);
     try {
         const updated = eventModel.updateEvent(id, updates);
         if (!updated) return res.status(404).json({ error: 'Event not found' });
@@ -117,7 +117,7 @@ export function deleteItem(req, res) {
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
-        if (!req.user || event.userId !== req.user.id) {
+        if (!req.user || Number(event.userId) !== Number(req.user.id)) {
             return res.status(403).json({ error: 'You are not authorized to delete this event' });
         }
         const deleted = eventModel.deleteEvent(id);

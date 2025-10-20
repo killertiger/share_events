@@ -38,8 +38,8 @@ export function initializeDatabase() {
     date TEXT NOT NULL,
     createdAt TEXT NOT NULL,
     updatedAt TEXT NOT NULL,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    userId INTEGER,
+    FOREIGN KEY (userId) REFERENCES users(id)
   );
 `);
   console.log('Database initialized');
