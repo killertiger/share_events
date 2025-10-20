@@ -9,6 +9,7 @@ Dependencies:
 - bcryptjs - Encrypt data, e.g. password
 - jsonwebtoken - JWT
 - multer - upload multiple files
+- cors - cors configuration
 
 VsCode Extensions:
 - SQLite Viewer - https://marketplace.cursorapi.com/items/?itemName=qwtel.sqlite-viewer

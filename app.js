@@ -3,13 +3,16 @@ import express from 'express';
 import userRoutes from './routes/users.js';
 import eventRoutes from './routes/events.js';
 import { initializeDatabase } from './db.js';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // Routes
 app.use('/users', userRoutes);
