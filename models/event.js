@@ -69,3 +69,19 @@ export function deleteEvent(id) {
   stmt.run(id);
   return existing;
 }
+
+export function registerUserForEvent(eventId, userId, createdAt) {
+  const stmt = db.prepare(`
+    INSERT INTO registrations (eventId, userId, createdAt)
+    VALUES (?, ?, ?)
+  `);
+  stmt.run(eventId, userId, createdAt);
+}
+
+export function unregisterUserFromEvent(eventId, userId) {
+  const stmt = db.prepare(`
+    DELETE FROM registrations
+    WHERE eventId = ? AND userId = ?
+  `);
+  stmt.run(eventId, userId);
+}

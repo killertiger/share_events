@@ -1,19 +1,19 @@
 // /Users/killertiger/development/udemy_share_events/db.js
-import Database from 'better-sqlite3';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import Database from "better-sqlite3";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure data directory exists
-const dataDir = path.join(__dirname, 'data');
+const dataDir = path.join(__dirname, "data");
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir);
 }
 
-const dbPath = path.join(dataDir, 'app.db');
+const dbPath = path.join(dataDir, "app.db");
 const db = new Database(dbPath);
 
 export function initializeDatabase() {
@@ -42,7 +42,19 @@ export function initializeDatabase() {
     FOREIGN KEY (userId) REFERENCES users(id)
   );
 `);
-  console.log('Database initialized');
+
+  db.exec(`
+  CREATE TABLE IF NOT EXISTS registrations (
+    id INTEGER PRIMARY KEY,
+    userId TEXT NOT NULL,
+    eventId TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (eventId) REFERENCES events(id),
+    UNIQUE(userId, eventId)
+  );
+`);
+  console.log("Database initialized");
 }
 
 initializeDatabase();

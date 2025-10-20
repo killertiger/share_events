@@ -127,3 +127,31 @@ export function deleteItem(req, res) {
         return res.status(500).json({ error: err?.message || 'Failed to delete event' });
     }
 }
+
+export function registerForEvent(req, res) {
+    const { id } = req.params;
+    try {
+        const event = eventModel.getEventById(id);
+        if (!event) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        eventModel.registerUserForEvent(id, req.user.id, Date.now());
+        return res.json({ message: 'Registered for event successfully' });
+    } catch (err) {
+        return res.status(500).json({ error: err?.message || 'Failed to register for event' });
+    }
+}
+
+export function unregisterFromEvent(req, res) {
+    const { id } = req.params;
+    try {
+        const event = eventModel.getEventById(id);
+        if (!event) {
+            return res.status(404).json({ error: 'Event not found' });
+        }
+        eventModel.unregisterUserFromEvent(id, req.user.id);
+        return res.json({ message: 'Unregistered from event successfully' });
+    } catch (err) {
+        return res.status(500).json({ error: err?.message || 'Failed to unregister from event' });
+    }
+}

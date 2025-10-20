@@ -29,4 +29,8 @@ router.get("/", eventController.getAll);
 // GET /events/:id
 router.get("/:id", eventController.get);
 
+router.post('/:id/register', authenticate, eventController.registerForEvent);
+
+router.post('/:id/unregister', authenticate, eventController.unregisterFromEvent);
+
 export default router;
